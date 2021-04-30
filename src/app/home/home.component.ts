@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { TestService } from '../test.service';
 import { Observable } from 'rxjs';
-// import { ColumnMode } from '@swimlane/ngx-datatable/public-api';
+import { ColumnMode } from '@swimlane/ngx-datatable/public-api';
 
 
 @Component({
@@ -25,6 +25,8 @@ export class HomeComponent {
   // ColumnMode = ColumnMode;
 
   constructor(private testService: TestService) {
+    
+  console.log(ColumnMode,'111')
     this.fetch((data:any) => {
       this.rows = data;
       setTimeout(() => {
