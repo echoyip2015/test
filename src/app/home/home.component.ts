@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+
+import { TestService } from '../test.service';
+import { Observable } from 'rxjs';
 // import { ColumnMode } from '@swimlane/ngx-datatable/public-api';
 
 
@@ -8,42 +11,43 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.less']
 })
 export class HomeComponent {
+
   rows = [];
   loadingIndicator = true;
   reorderable = true;
-
+  sort = 'account_executive';
   columns = [
-    { prop: 'name', summaryFunc: () => null },
-    { name: 'Gender', summaryFunc: () => null },
-    { name: 'Company', summaryFunc: () => null }
+    { prop: 'Account Executives' },
+    { prop: 'Daily Turnover'},
+    { prop: 'Accumulated Turnover'}
   ];
 
   // ColumnMode = ColumnMode;
 
-  constructor() {
+  constructor(private testService: TestService) {
     this.fetch((data:any) => {
       this.rows = data;
       setTimeout(() => {
         this.loadingIndicator = false;
-      }, 1500);
+      }, 5000);
     });
   }
 
   fetch(cb:any) {
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/company.json`);
 
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
+    let sdata = {"_start": 0, "_limit":10, "_sort": this.sort, "_order": 'ASC'};
+    this.testService.getBackendData(sdata).subscribe(
+       succ => {
+         console.log(succ)
+         const _this = this;
+         // refresh the list
+         cb = succ
+         return true;
+       },
+       error => {
+         console.error("Error search!");
+       }
+    );
   }
 
-  private summaryForGender(cells: string[]) {
-    const males = cells.filter(cell => cell === 'male').length;
-    const females = cells.filter(cell => cell === 'female').length;
-
-    return `males: ${males}, females: ${females}`;
-  }
 }
