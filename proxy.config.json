@@ -1,0 +1,11 @@
+{
+    "/": {
+        "target": "http://rtq.chicheongweng.com:3000/",
+        "logLevel": "debug",
+        "secure": false,
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/": ""
+        }
+    }
+  }
