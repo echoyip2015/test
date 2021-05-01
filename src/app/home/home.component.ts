@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { TestService } from '../test.service';
 import { Observable } from 'rxjs';
-import { ColumnMode } from '@swimlane/ngx-datatable/public-api';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 
 
 @Component({
@@ -22,11 +22,10 @@ export class HomeComponent {
     { prop: 'Accumulated Turnover'}
   ];
 
-  // ColumnMode = ColumnMode;
+  ColumnMode = ColumnMode;
 
   constructor(private testService: TestService) {
     
-  console.log(ColumnMode,'111')
     this.fetch((data:any) => {
       this.rows = data;
       setTimeout(() => {
@@ -36,20 +35,31 @@ export class HomeComponent {
   }
 
   fetch(cb:any) {
-
+    const _this =this
     let sdata = {"_start": 0, "_limit":10, "_sort": this.sort, "_order": 'ASC'};
-    this.testService.getBackendData(sdata).subscribe(
+    _this.testService.getBackendData(sdata).subscribe(
        succ => {
-         console.log(succ)
-         const _this = this;
          // refresh the list
-         cb = succ
-         return true;
+         return succ;
        },
        error => {
+        this.defult((data:any) => {
+          this.rows = data;
+        });
          console.error("Error search!");
        }
     );
+  }
+
+  defult(cb:any){
+    const req = new XMLHttpRequest();
+    req.open('GET', `assets/test.json`);
+
+    req.onload = () => {
+      cb(JSON.parse(req.response));
+    };
+
+    req.send();
   }
 
 }
