@@ -1,18 +1,39 @@
 <div class="content">
     <h1>Securities</h1>
-    <ngx-datatable
-        class="bootstrap"
-        [rows]="rows"
-        [columnMode]="ColumnMode.force"
-        [loadingIndicator]="loadingIndicator"
-        [columns]="columns"
-        [headerHeight]="40"
-        [summaryRow]="true"
-        [footerHeight]="40"
-        [limit]="10"
-        rowHeight="auto"
-        [reorderable]="reorderable"
-        
-      >
-      </ngx-datatable>
+    <div class="table">
+      <ngx-datatable
+          class="bootstrap"
+          [rows]="rows"
+          [columnMode]="ColumnMode.force"
+          [loadingIndicator]="loadingIndicator"
+          [columns]="columns"
+          [headerHeight]="40"
+          [footerHeight]="50"
+          [limit]="10"
+          rowHeight="auto"
+          [reorderable]="reorderable"
+          [treeToRelation]="'id'"
+        >
+          <ngx-datatable-column name="" [width]="80">
+            <ng-template let-rowIndex="rowIndex" let-row="row" ngx-datatable-cell-template>
+              <span>{{ rowIndex+1 }}</span>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Account Executive" [width]="300">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+              <strong>{{ row.account_executive}}</strong>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Daily Turnover" [width]="300">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+              <strong>{{ row.accumulated_turnover}}</strong>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Accumulated Turnover" [width]="300">
+            <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+              <strong>{{ row.daily_turnover}}</strong>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
 </div>

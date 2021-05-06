@@ -21,10 +21,7 @@
     "@angular/platform-browser-dynamic": "~11.2.12",
     "@angular/router": "~11.2.12",
     "@swimlane/ngx-datatable": "^19.0.0",
-<<<<<<< HEAD
-=======
     "jqwidgets-ng": "^12.0.4",
->>>>>>> 04e9b8e59f1d4aa4cfad8283063ad028b69e295b
     "ngx-bootstrap": "^6.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

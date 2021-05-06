@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { TestService } from '../test.service';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 
 
@@ -10,56 +10,52 @@ import { ColumnMode } from '@swimlane/ngx-datatable';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  rows = [];
+  rows:any = [];
   loadingIndicator = true;
   reorderable = true;
   sort = 'account_executive';
   columns = [
-    { prop: 'Account Executives' },
-    { prop: 'Daily Turnover'},
-    { prop: 'Accumulated Turnover'}
+    { name: 'Account Executive', prop: 'account_executive' },
+    { name: 'Daily Turnover', prop:'accumulated_turnover'},
+    { name: 'Accumulated Turnover', prop:'daily_turnover'}
   ];
 
   ColumnMode = ColumnMode;
+  private timer:any;
 
   constructor(private testService: TestService) {
-    
-    this.fetch((data:any) => {
-      this.rows = data;
-      setTimeout(() => {
-        this.loadingIndicator = false;
-      }, 5000);
-    });
+    this.timer = setInterval(() => {
+      this.fetch();
+      }, 5000)
   }
 
-  fetch(cb:any) {
-    const _this =this
-    let sdata = {"_start": 0, "_limit":10, "_sort": this.sort, "_order": 'ASC'};
-    _this.testService.getBackendData(sdata).subscribe(
-       succ => {
+  ngOnInit (){
+    this.fetch();
+  }
+
+  ngOnDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    
+    }
+  }
+
+  fetch() {
+    const _this = this
+    const params = {"_start": 0,  "_sort": this.sort, "_order": 'ASC'}
+    _this.testService.getBackendData(params).subscribe(
+       resp => {
          // refresh the list
-         return succ;
+         _this.rows = resp;
        },
        error => {
-        this.defult((data:any) => {
-          this.rows = data;
-        });
          console.error("Error search!");
        }
     );
   }
 
-  defult(cb:any){
-    const req = new XMLHttpRequest();
-    req.open('GET', `assets/test.json`);
-
-    req.onload = () => {
-      cb(JSON.parse(req.response));
-    };
-
-    req.send();
-  }
+  
 
 }
